@@ -29,10 +29,15 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       {/* Sidebar */}
       <motion.div
-        initial={{ x: -280 }}
-        animate={{ x: sidebarOpen ? 0 : -280 }}
-        transition={{ type: "spring", damping: 20, stiffness: 200 }}
-        className="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg lg:transform-none lg:opacity-100"
+        initial={false}
+        animate={{ 
+          x: sidebarOpen ? 0 : -280,
+          width: "16rem"
+        }}
+        className={cn(
+          "fixed inset-y-0 left-0 z-30 bg-white shadow-lg",
+          "lg:transform-none lg:opacity-100 lg:translate-x-0"
+        )}
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
