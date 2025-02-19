@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { ArrowUpRight, ArrowDownRight, Users, DollarSign, Activity, LineChart } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const stats = [
