@@ -1,114 +1,76 @@
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  LayoutDashboard,
-  Users,
-  Settings,
-  BarChart3,
-  HelpCircle,
+import { 
+  LayoutDashboard, 
+  BarChart2, 
+  Users, 
+  Settings, 
+  HelpCircle 
 } from "lucide-react";
 
-interface NavigationItem {
-  title: string;
-  href: string;
-  icon: React.ComponentType;
-}
-
-const navigationItems: NavigationItem[] = [
+const navigationItems = [
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: "Overview",
     icon: LayoutDashboard,
+    href: "/dashboard"
   },
   {
     title: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
+    icon: BarChart2,
+    href: "/analytics"
   },
   {
     title: "Users",
-    href: "/users",
     icon: Users,
+    href: "/users"
   },
   {
     title: "Settings",
-    href: "/settings",
     icon: Settings,
+    href: "/settings"
   },
   {
     title: "Help",
-    href: "/help",
     icon: HelpCircle,
-  },
+    href: "/help"
+  }
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const item = {
-  hidden: { opacity: 0, x: -20 },
-  show: { opacity: 1, x: 0 }
-};
-
-export function Navigation() {
-  const location = useLocation();
-
+const Navigation = () => {
   return (
-    <motion.nav
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="space-y-1"
-    >
-      {navigationItems.map((navItem) => {
-        const Icon = navItem.icon;
-        const isActive = location.pathname === navItem.href;
-
-        return (
-          <motion.div key={navItem.href} variants={item}>
+    <nav className="flex-1 p-4">
+      <motion.ul 
+        className="space-y-2"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.05
+            }
+          }
+        }}
+      >
+        {navigationItems.map((item, index) => (
+          <motion.li
+            key={item.href}
+            variants={{
+              hidden: { opacity: 0, x: -20 },
+              visible: { opacity: 1, x: 0 }
+            }}
+          >
             <Link
-              to={navItem.href}
-              className={cn(
-                "flex items-center px-4 py-2 text-sm font-medium rounded-md relative overflow-hidden",
-                "transition-colors duration-150 ease-in-out",
-                isActive
-                  ? "text-indigo-600 bg-indigo-50"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-              )}
+              to={item.href}
+              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
             >
-              {isActive && (
-                <motion.div
-                  layoutId="activeNav"
-                  className="absolute inset-0 bg-indigo-50"
-                  initial={false}
-                  transition={{
-                    type: "spring",
-                    stiffness: 500,
-                    damping: 30
-                  }}
-                />
-              )}
-              <span className="relative flex items-center">
-                <Icon className={cn(
-                  "mr-3 h-5 w-5",
-                  isActive ? "text-indigo-600" : "text-gray-400"
-                )} />
-                {navItem.title}
-              </span>
+              <item.icon className="w-5 h-5 mr-3" />
+              <span>{item.title}</span>
             </Link>
-          </motion.div>
-        );
-      })}
-    </motion.nav>
+          </motion.li>
+        ))}
+      </motion.ul>
+    </nav>
   );
-}
+};
 
 export default Navigation;

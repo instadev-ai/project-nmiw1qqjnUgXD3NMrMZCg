@@ -1,31 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Menu, User } from "lucide-react";
-import { useState } from "react";
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import Navigation from "./Navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
+import { useMobile } from "@/hooks/use-mobile";
 
 interface DashboardLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isMobile, sidebarOpen, setSidebarOpen } = useMobile();
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Mobile sidebar overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-gray-600 bg-opacity-75 z-20 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-      </AnimatePresence>
+    <div className="min-h-screen bg-gray-50">
+      {/* Overlay */}
+      {isMobile && sidebarOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/50"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* Sidebar */}
       <motion.div
@@ -43,65 +39,41 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex items-center justify-between h-16 px-4 border-b"
+          className="flex flex-col h-full"
         >
-          <span className="text-xl font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-            Your App
-          </span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-        </motion.div>
-        <div className="p-4">
+          <div className="p-6">
+            <h1 className="text-xl font-bold">Dashboard</h1>
+          </div>
           <Navigation />
-        </div>
+        </motion.div>
       </motion.div>
 
-      {/* Main content */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
-        {/* Top header */}
-        <motion.header
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white shadow-sm"
-        >
-          <div className="flex items-center justify-between h-16 px-4">
+      {/* Main Content */}
+      <div className="lg:pl-64">
+        {/* Header */}
+        <header className="sticky top-0 z-10 bg-white border-b">
+          <div className="flex items-center px-6 py-4">
             <Button
               variant="ghost"
               size="icon"
               className="lg:hidden"
               onClick={() => setSidebarOpen(true)}
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="w-6 h-6" />
             </Button>
-            <div className="flex items-center space-x-4">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                </Button>
-              </motion.div>
-            </div>
           </div>
-        </motion.header>
+        </header>
 
-        {/* Page content */}
-        <motion.main
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex-1 p-4"
-        >
-          {children}
-        </motion.main>
+        {/* Page Content */}
+        <main className="p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            {children}
+          </motion.div>
+        </main>
       </div>
     </div>
   );
